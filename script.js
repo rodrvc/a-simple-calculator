@@ -5,13 +5,19 @@ const btnResult = document.querySelector('[data-result]');
 
 const currentNumber = document.querySelector('[data-screen]');
 const btnReset = document.querySelector('[data-reset]');
+const btnRemove = document.querySelector('[data-remove]');
 
-const numberx = document.querySelector('[data-numberx]').innerHTML;
 let isResult = false;
+let isError = false;
 
 
 btnNumber.forEach(btn => {
     btn.addEventListener('click', function () { // current number exist
+        if (isError) {
+            currentNumber.innerHTML = '';
+            isError = false;
+        }
+
         currentNumber.innerHTML = currentNumber.innerHTML + btn.innerHTML
 
         lastDigit = currentNumber.innerHTML.charAt(currentNumber.innerHTML.length - 1);
@@ -28,6 +34,11 @@ btnNumber.forEach(btn => {
 
 btnOperator.forEach(btn => {
     btn.addEventListener('click', function () {
+        if (isError) 
+            return currentNumber.innerHTML = '';
+        
+
+
         if (currentNumber.innerHTML == '') 
             return currentNumber.innerHTML = '';
         
@@ -40,7 +51,15 @@ btnOperator.forEach(btn => {
 
 
 btnResult.addEventListener('click', function () {
-    let result = parseFloat(eval(currentNumber.innerHTML));
+    let result;
+    console.log(currentNumber.innerHTML)
+    try {
+        result = parseFloat(eval(currentNumber.innerHTML));
+    } catch (error) {
+        isError = true;
+        return currentNumber.innerHTML = 'error :(!'
+    }
+
 
     if (currentNumber.innerHTML == '') 
         return currentNumber.innerHTML = ''
@@ -58,4 +77,9 @@ btnReset.addEventListener('click', function () {
     currentNumber.innerHTML = '';
     console.log('heelloo  asdasd ')
     isResult = false;
+})
+
+btnRemove.addEventListener('click', () => {
+    currentNumber.innerHTML = currentNumber.innerHTML.slice(0, -1)
+    console.log("Se ha borrado un digito")
 })
